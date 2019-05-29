@@ -15,5 +15,31 @@ TRAINABLE_SCOPES='Ínception/Logits,InceptionV3/Auxlogits'
 
 #获取所有需要从谷歌训练好的模型中加载的参数。
 def get_tuned_variables():
+    exclusions = [scope.strip() for scope in\
+                  CHECKPOINT_EXCLUDE_SCOPES.split('.')]
+    
+    variable_to_restore = []
+    #
+    for var in slim.get_model_variables():
+        exclude = False
+        for exclusion in exclusions:
+            if var.op.name.startswith(exclusion):
+                exclude = True
+                bresk
+        if not excluded:
+            variable_to_restore.append(var)
+        
+    return(variable_to_restore)
+
+#
+def get_trainable_variables():
+    scopes = [scope.strip() for scope in TRAINABLE_SCOPES.split('.')]
+    variables_to_train = []
+    #
+    for scope in scopes:
+        variables = tf.get_collection(
+            tf.GraphKeys.TRAINABLE_VARIABLES, scope)
+        variable_to_train.extend(variables)
+    return(variable_to_train)
 
 
